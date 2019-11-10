@@ -35,6 +35,7 @@ public class Staff {
 	public boolean deleteInventory(Car car)
 	{
 		// Delete the entry in DB for the given car
+		return true;
 	}
 
 
