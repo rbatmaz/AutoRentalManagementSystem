@@ -14,7 +14,15 @@ public class Customer {
 	private String customerPhoneNumber;
 	private String customerAddress;
 	
+	public Customer(String fullName, String driverLicenseNum, String phoneNum, String address)
+	{
+		this.fullName = fullName;
+		this.driverLicenseNum = driverLicenseNum;
+		this.customerPhoneNumber = phoneNum;
+		this.customerAddress = address;
+	}
 	
+	// Attribute getter setters
 	public String getFullName() {
 		return fullName;
 	}
@@ -38,6 +46,20 @@ public class Customer {
 	}
 	public void setCustomerAddress(String customerAddress) {
 		this.customerAddress = customerAddress;
+	}
+	
+	// Class methods
+	
+	public boolean reserveVehicle(Car carWillBeReserved, Customer currentCustomer)
+	{
+		// IMplemenattion
+		return true;
+	}
+	
+	public boolean cancelReservation()
+	{
+		// TBD
+		return true;
 	}
 	
 	

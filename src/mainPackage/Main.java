@@ -20,6 +20,19 @@ public class Main {
 		// TODO Auto-generated method stub
 		
 		
+		// Create customer
+		Customer randomCustomer = new Customer("John Bush", "D1234 2345", "647784546", "446 Havendale");
+		Car randomCar = new Car();
+		
+		boolean operationSuccess = randomCustomer.reserveVehicle(randomCar, randomCustomer);
+		
+		
+		
+		
+		
+		
+		
+		
 		DatabaseManager dbManager = new DatabaseManager();
 		
 		Connection myConnection = dbManager.createDbConnection();
