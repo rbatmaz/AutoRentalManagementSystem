@@ -3,6 +3,10 @@
  */
 package mainPackage;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * @author Rasim
  *
@@ -50,9 +54,26 @@ public class Customer {
 	
 	// Class methods
 	
-	public boolean reserveVehicle(Car carWillBeReserved, Customer currentCustomer)
+	public boolean reserveVehicle(Car carWillBeReserved, Customer currentCustomer, DatabaseManager dbManager)
 	{
-		// IMplemenattion
+		Connection myConnection = dbManager.createDbConnection();
+		String dbQuery = "UPDATE 'car' SET 'isReserved' = '0' WHERE 'car'.'ID' = 2";
+		
+		
+		ResultSet results = dbManager.executeQuery(myConnection, dbQuery);
+		
+		try {
+			while(results.next())  
+			{
+				System.out.println(results.getString(1)+"  "+results.getString(2)+"  "+results.getInt(3));
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		  
+		
 		return true;
 	}
 	

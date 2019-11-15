@@ -20,6 +20,7 @@ public class Car {
 	private int rentRate;
 	private boolean isReserved;
 	private boolean isCheckedOut;
+
 	
 	// private int location;
 	
