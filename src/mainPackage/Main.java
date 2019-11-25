@@ -16,6 +16,10 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
+		// Customer interactions
+		ConsoleQuestions frontEnd = new ConsoleQuestions();
+		String customerInfo = frontEnd.getAllCustomerInfo();
+		
 		
 		// TODO Auto-generated method stub
 		
@@ -23,7 +27,8 @@ public class Main {
 		
 		
 		// Create customer
-		Customer randomCustomer = new Customer("John Bush", "D1234 2345", "647784546", "446 Havendale");
+		Customer randomCustomer = new Customer("John Travolta", "D1234 2345", "647784546", "446 Havendale");
+		boolean result = randomCustomer.createCustomerDb(dbManager);
 		Car randomCar = new Car();
 		
 		boolean operationSuccess = randomCustomer.reserveVehicle(randomCar, randomCustomer, dbManager);
