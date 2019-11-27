@@ -22,6 +22,21 @@ public class Customer {
 	private Integer reservedCarId;
 	private Integer checkoutCarId;
 	
+	public Customer() {
+		
+	}
+	
+	public Customer(String fullName, String driverLicenseNum, String phoneNum, String address, Integer reservedCarId, Integer checkoutCarId)
+	{
+		this.setFullName(fullName);
+		this.setDriverLicenseNum(driverLicenseNum);
+		this.setCustomerPhoneNumber(phoneNum);
+		this.setCustomerAddress(address);
+		this.setReservedCarId(reservedCarId);
+		this.setCheckoutCarId(checkoutCarId);
+	}
+
+
 	public Customer(String fullName, String driverLicenseNum, String phoneNum, String address)
 	{
 		this.setFullName(fullName);
@@ -30,55 +45,24 @@ public class Customer {
 		this.setCustomerAddress(address);
 		this.setReservedCarId(null);
 		this.setCheckoutCarId(null);
-		// createCustomerDb(fullName,driverLicenseNum, phoneNum,address);
-		
-		
 	}
 	
-	public void createCustomerDb(String fullName,String driverLicenseNum,String phoneNum,String address) 
-	{
-		// Created by Omer
 	
-		try {
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/arms", "root","");
-		System.out.println("Connecting to database...");
-		
-		Statement stmt = conn.createStatement();
-		
-		System.out.println("Inserting new customer into db");
-		
-		String dbQuery = "INSERT INTO customer (fullName, driverLicenseNum, customerPhoneNumber, customerAddress, reservedCarId, checkoutCarId) "
-				+ "VALUES ("+ "\"" + fullName + "\"" + " , "+ "\"" + driverLicenseNum+ "\"" + " , "+ "\"" + phoneNum+ "\"" + " , " + "\"" + address+ "\"" + ", null , null );";
-		
-		System.out.println(dbQuery);
-		int rs = stmt.executeUpdate(dbQuery);   // En son burada kaldik Omer ile
-		
-		System.out.println(rs);
-	
-		conn.close();
-		
-		}
-		catch(Exception e) {
-			System.out.println(e);
-		}
-		
-		
-		
-	}
 	
 	public boolean createCustomerDb(DatabaseManager dbManager) 
 	{
+
 		boolean result = false;
 		try
 		{
 			String dbQuery = "INSERT INTO customer (fullName, driverLicenseNum, customerPhoneNumber, customerAddress, reservedCarId, checkoutCarId) "
-					+ "VALUES ("+ "\"" + this.fullName + "\"" + " , "+ "\"" + this.driverLicenseNum + "\"" + " , "+ "\"" + this.customerPhoneNumber + "\"" + " , " + "\"" + this.customerAddress+ "\"" + ", null , null );";
+					+ "VALUES ("+ "\"" + this.fullName + "\"" + " , "+ "\"" + this.driverLicenseNum + "\"" + " , "+ "\"" + this.customerPhoneNumber + "\"" + " , " + "\"" + this.customerAddress+ "\"" +
+					","+ this.reservedCarId +"," + this.checkoutCarId +");";
 			
 			
 			
 			System.out.println(dbQuery);
-			int isSuccess = dbManager.executeQuery(dbQuery);
+			int isSuccess = dbManager.updateTable(dbQuery);
 			
 			if (isSuccess == 1)
 			{
@@ -100,9 +84,15 @@ public class Customer {
 		
 		
 		return result;	
+	}
+	
+	public String getCustomerInfo() {
 		
+		String info = "customer name = " + this.fullName + "\n" + "customer driver license = " + this.driverLicenseNum
+		+ "\n" + "customer phone number = " +  this.customerPhoneNumber + "\n" + "customer address = " + this.customerAddress
+		+ "\n" + "reserved car = " + this.reservedCarId + "\n" + "checked out car" + this.checkoutCarId + "\n";
 		
-		
+		return info;
 	}
 	
 	// Attribute getter setters
@@ -139,7 +129,7 @@ public class Customer {
 		{	
 			String dbQuery = "UPDATE car SET isReserved = 1 WHERE ID = 2";
 			
-			int result = dbManager.executeQuery(dbQuery);
+			int result = dbManager.updateTable(dbQuery);
 
 			System.out.println(result);	
 		
@@ -221,6 +211,8 @@ public class Customer {
 	public void setCheckoutCarId(Integer checkoutCarId) {
 		this.checkoutCarId = checkoutCarId;
 	}
+
+	
 	
 	
 

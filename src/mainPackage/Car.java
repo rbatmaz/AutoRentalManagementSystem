@@ -13,18 +13,75 @@ public class Car {
 	private String model;
 	private int year;
 	private int milageBeforeRent;  // [km]
-	private int milageAfterRent;   // [km]
+	private Integer milageAfterRent = null;   // [km]
 	private String color;
 	private String transmission;
 	private int seatNumber;
 	private int rentRate;
 	private boolean isReserved;
 	private boolean isCheckedOut;
+	
 
 	
-	// private int location;
+	public Car(String make,String model, int year, int milageBeforeRent, String color, String transmission, 
+			int seatNumber, int rentRate ) {
+		this.make = make;
+		this.model = model;
+		this.year = year;
+		this.milageBeforeRent = milageBeforeRent;
+
+		this.color = color;
+		this.transmission = transmission;
+		this.seatNumber = seatNumber;
+		this.rentRate = rentRate;
+		this.isReserved = false;
+		this.isCheckedOut = false;
+		
 	
-	// TBD: Constructor method will be created
+	}
+	
+	public boolean createCarDb(DatabaseManager dbManager) 
+	{
+		boolean result = false;
+		try
+		{
+			String dbQuery = "INSERT INTO car (make, model, year, color, transmission, seatNumber, rentRate, isReserved, isCheckedOut) "
+					+ "VALUES ("+ "\"" + this.make + "\"" + " , "+ "\"" + this.model + "\"" + " , "+ this.year  + 
+				" , "+ "\"" + this.color + "\"" + " , "+ "\"" + this.transmission + "\"" + "," + this.seatNumber + "," + this.rentRate 	+ ","+ this.isReserved +"," + this.isCheckedOut +");";
+			
+			
+			
+			System.out.println(dbQuery);
+			int isSuccess = dbManager.updateTable(dbQuery);
+			
+			if (isSuccess == 1)
+			{
+				System.out.println("Car has successfully been created in DB");
+				result = true;
+			}
+			else
+			{
+				System.out.println("ERROR: Failed to write car info in DB!");
+				result = false;
+				
+			}
+			
+		}
+		catch(Exception e) 
+		{
+			System.out.println(e);
+		}
+		
+		
+		return result;	
+		
+		
+		
+	}
+	
+	
+	
+	
 	
 	public String getTransmissionType() {
 		return transmission;

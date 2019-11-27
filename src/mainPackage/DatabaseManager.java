@@ -31,7 +31,21 @@ public class DatabaseManager {
 		} 		
 	}
 	
-	public int executeQuery(String query)
+	public ResultSet executeSQL(String query) {
+		
+		ResultSet rs = null;
+		try {
+			rs = this.statement.executeQuery(query);
+		} catch (Exception e) {
+
+			System.out.println(e);
+		}
+		
+		return rs;
+		
+	}
+	
+	public int updateTable(String query)
 	{
 		int result = 0;
 		

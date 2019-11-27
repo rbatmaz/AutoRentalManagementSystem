@@ -16,22 +16,23 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
+		DatabaseManager dbManager = new DatabaseManager();
 		// Customer interactions
-		ConsoleQuestions frontEnd = new ConsoleQuestions();
-		String customerInfo = frontEnd.getAllCustomerInfo();
+		ConsoleQuestions frontEnd = new ConsoleQuestions(dbManager);
+
 		
 		
 		// TODO Auto-generated method stub
 		
-		DatabaseManager dbManager = new DatabaseManager();	
+			
 		
 		
 		// Create customer
-		Customer randomCustomer = new Customer("John Travolta", "D1234 2345", "647784546", "446 Havendale");
-		boolean result = randomCustomer.createCustomerDb(dbManager);
-		Car randomCar = new Car();
-		
-		boolean operationSuccess = randomCustomer.reserveVehicle(randomCar, randomCustomer, dbManager);
+		//Customer randomCustomer = new Customer("cristiano ranoldo", "D1234 2345", "647784546", "446 Havendale");
+		//boolean result = randomCustomer.createCustomerDb(dbManager);
+		//Car randomCar = new Car("Toyota", "Rav", 2019, 15000, "Green", "Automatic", 5, 10);
+		//boolean carCreateResult = randomCar.createCarDb(dbManager);
+		//boolean operationSuccess = randomCustomer.reserveVehicle(randomCar, randomCustomer, dbManager);
 		
 		
 		
@@ -41,10 +42,6 @@ public class Main {
 		// UPDATE `car` SET `isReserved` = '1' WHERE `car`.`ID` = 2;
 		// "DELETE FROM `car` WHERE `car`.`ID` = 1"
 		// UPDATE `car` SET `milageAfterRent` = '21456', `pickUpDate` = '2019-11-22', `dropOffDate` = '2019-11-28' WHERE `car`.`ID` = 2;
-		
-		
-		
-		int x = 5;
 		
 
 	}
