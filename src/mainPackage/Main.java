@@ -19,6 +19,30 @@ public class Main {
 		DatabaseManager dbManager = new DatabaseManager();
 		// Customer interactions
 		ConsoleQuestions frontEnd = new ConsoleQuestions(dbManager);
+		
+		Customer currentCustomer = frontEnd.getCurrentInteractedCustomer();
+		
+		// Check whether existing customer... If yes, UPDATE, otherwise CREATE new one.
+		// by looking at Driver License
+		
+		boolean isAlreadyExisting = currentCustomer.IsExistingCustomer(); // TODO: This method should be implemented
+		
+		if (isAlreadyExisting)
+		{
+			// UPDATE
+		}
+		else
+		{
+			boolean isSuccess = currentCustomer.createCustomerDb(dbManager);
+		}
+		
+		
+		
+		
+		
+		
+		
+		int x = 5;
 
 		
 		

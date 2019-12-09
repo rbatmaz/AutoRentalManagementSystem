@@ -9,11 +9,13 @@ public class ConsoleQuestions
 	// This class will behave as Front End of the App
 	
 	DatabaseManager dbManager;
+	private Customer currentInteractedCustomer = null;
 	
 
 	
 	
 	public ConsoleQuestions(DatabaseManager dbManager){
+		
 		Map <Integer, String> CAR_CATEGORIES = new HashMap<>();
 		
 		//Add categories
@@ -34,7 +36,7 @@ public class ConsoleQuestions
 		char type = input.next().charAt(0);
 		
 		if(Character.toLowerCase(type) == 'c') {
-			CustomerConsoleQuestions(CAR_CATEGORIES);
+			this.currentInteractedCustomer = CustomerConsoleQuestions(CAR_CATEGORIES);
 		}
 		
 		// Else kismina staff kismini mi yapmak lazim?
@@ -98,22 +100,23 @@ public class ConsoleQuestions
 	
 	
 		System.out.println(newCustomer.getCustomerInfo());
-		if(isExistingCustomer== false) 
-		{
-			newCustomer.createCustomerDb(this.dbManager);
-		}
+		
+//		if(isExistingCustomer == false) 
+//		{
+//			newCustomer.createCustomerDb(this.dbManager);
+//		}
 		
 		System.out.println("Please choose car category.\n 1)ECONOMY \n 2)FULL SIZE \n 3)LUXURY \n 4)VAN \n 5)EXOTIC \n");
 		Integer category = input.nextInt();
 		
 			
-		query =  "SELECT make,model,color,transmission,seatNumber,rentRate from car where Category=" + '"' + CAR_CATEGORIES.get(category) + '"' + ";";
+		query =  "SELECT ID,make,model,color,transmission,seatNumber,rentRate from car where Category=" + '"' + CAR_CATEGORIES.get(category) + '"' + ";";
 		
 		result = dbManager.executeSQL(query);
 		
 		try {
 			System.out.println("Please enter ID of the car that you want to rent");
-			System.out.printf("%-12s%-20s%-12s%-18s%-12s%s\n",
+			System.out.printf("%-12s%-12s%-20s%-12s%-18s%-12s%s\n",
 					"ID",
 					"MAKE",
 					"MODEL",
@@ -125,13 +128,14 @@ public class ConsoleQuestions
 			while(result.next()) {
 				
 				System.out.printf("%-12s%-12s%-20s%-12s%-18s%-12s%s\n",
-						String.valueOf(result.getInt(1)),
+						String.valueOf(result.getInt(7)),
+						result.getString(1).toUpperCase(),
 						result.getString(2).toUpperCase(),
-						result.getString(3).toUpperCase(),
 						result.getString(4).toUpperCase(),
 						result.getString(5).toUpperCase(),
 						String.valueOf(result.getInt(6)),
-						String.valueOf(result.getInt(7)));  
+						String.valueOf(result.getInt(7))
+						);  
 
 			}
 		} 
@@ -139,34 +143,50 @@ public class ConsoleQuestions
 		catch (Exception e) {
 			System.out.println(e);
 		}
-
-		boolean insurance= false;
-		boolean prefilled=false;
-		boolean rentGps=false;
+		
+		int reservedCarId = input.nextInt();
+		newCustomer.setReservedCarId(reservedCarId);
 		
 		
 		System.out.println("How many days would you like to rent the car?"); // Write the model of the car later ... Yanlis yazilirsa hata ver
 		int rentDay = input.nextInt();
+		newCustomer.setRentDay(rentDay);
 		
 		System.out.println("Would you lie to get insurance with an extra cost of 45 CAD per day ? (Y/N)"); // Bu fiyati arabanin cinsine gore degistirebilirim. Y veya N disinda birsey yazilirsa hata ver.
-		char insurance0 = input.next().charAt(0);
+		char insuranceWanted = input.next().charAt(0);
 		
-		if(insurance0 == 'Y') {
-		 insurance = true;
+		if(insuranceWanted == 'Y') 
+		{
+			newCustomer.setInsuranceWanted(true);
+		}
+		else
+		{
+			newCustomer.setInsuranceWanted(false);
+			
 		}
 		
 		System.out.println("Would you like your car prefilled with an extra cost of 50 CAD ? (Y/N)" ); // Bu fiyati arabanin buyuklugune gore degistirebilirim. Y veya N disinda birsey yazilirsa hata ver.
 		char prefilled0 = input.next().charAt(0);
 		
-		if(prefilled0 == 'Y') {
-			prefilled = true;
+		if(prefilled0 == 'Y') 
+		{
+			newCustomer.setPrefillWanted(true);
+		}
+		else
+		{
+			newCustomer.setPrefillWanted(false);
 		}
 		
 		System.out.println("Would you like to rent GPS with an extra cost of 5 CAD per day? (Y/N)"); // Y veya N disinda birsey yazilirsa hata ver.
 		char rentGps0 = input.next().charAt(0);
 		
-		if(rentGps0 == 'Y') {
-			rentGps = true;
+		if(rentGps0 == 'Y') 
+		{
+			newCustomer.setGpsWanted(true);
+		}
+		else
+		{
+			newCustomer.setGpsWanted(false);
 		}
 		
 		
@@ -174,6 +194,22 @@ public class ConsoleQuestions
 
 		
 		return newCustomer;
+	}
+
+
+	/**
+	 * @return the currentInteractedCustomer
+	 */
+	public Customer getCurrentInteractedCustomer() {
+		return currentInteractedCustomer;
+	}
+
+
+	/**
+	 * @param currentInteractedCustomer the currentInteractedCustomer to set
+	 */
+	public void setCurrentInteractedCustomer(Customer currentInteractedCustomer) {
+		this.currentInteractedCustomer = currentInteractedCustomer;
 	}
 
 	

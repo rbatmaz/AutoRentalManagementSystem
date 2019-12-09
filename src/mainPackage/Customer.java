@@ -15,12 +15,16 @@ import java.sql.Statement;
  */
 public class Customer {
 	
-	private String fullName;
-	private String driverLicenseNum;
-	private String customerPhoneNumber;
-	private String customerAddress;
-	private Integer reservedCarId;
-	private Integer checkoutCarId;
+	private String fullName = "";
+	private String driverLicenseNum = "";
+	private String customerPhoneNumber = "";
+	private String customerAddress = "";
+	private Integer reservedCarId = -1;
+	private Integer checkoutCarId = -1;
+	private boolean isInsuranceWanted;
+	private boolean isPrefillWanted;
+	private boolean isGpsWanted;
+	private Integer rentDay;
 	
 	
 	public Customer() {
@@ -52,10 +56,10 @@ public class Customer {
 	public Customer(int rentDay, boolean insurance, boolean prefilled, boolean rentGps) {
 		// TODO Auto-generated constructor stub
 		
-		this.setRentDay(rentDay);
-		this.setInsurance(insurance);
-		this.setPrefilled(prefilled);
-		this.setRentGps(rentGps);
+		this.rentDay = rentDay;
+		this.isInsuranceWanted = insurance;
+		this.isPrefillWanted = prefilled;
+		this.isGpsWanted = rentGps;
 		
 	}
 
@@ -63,9 +67,20 @@ public class Customer {
 
 		boolean result = false;
 		try	{
-			String dbQuery = "INSERT INTO customer (fullName, driverLicenseNum, customerPhoneNumber, customerAddress, reservedCarId, checkoutCarId) "
-					+ "VALUES ("+ "\"" + this.fullName + "\"" + " , "+ "\"" + this.driverLicenseNum + "\"" + " , "+ "\"" + this.customerPhoneNumber + "\"" + " , " + "\"" + this.customerAddress+ "\"" +
-					","+ this.reservedCarId +"," + this.checkoutCarId +");";
+			String dbQuery = "INSERT INTO customer ("
+					+ "fullName,"
+					+ "driverLicenseNum, "
+					+ "customerPhoneNumber, "
+					+ "customerAddress, "
+					+ "reservedCarId, "
+					+ "checkoutCarId) "
+					+ "VALUES ("+ "\"" + 
+					this.fullName + "\"" + " , "+ "\"" + 
+					this.driverLicenseNum + "\"" + " , "+ "\"" + 
+					this.customerPhoneNumber + "\"" + " , " + "\"" + 
+					this.customerAddress+ "\"" + ","+ 
+					this.reservedCarId +"," + 
+					this.checkoutCarId +");";
 			
 			
 			
@@ -105,33 +120,9 @@ public class Customer {
 	// Attribute getter setters
 	//public Customer(int rentDay, char insurance, char prefilled, char rentGps)
 	
-	public int setRentDay(int rentDay) {
-		return rentDay;
-	}
+
 	
-	public char setInsurance0(char insurance0) {
-		return insurance0;
-	}
 	
-	public boolean setInsurance(boolean insurance) {
-		return insurance;
-	}
-	
-	public char setPrefilled0(char prefilled0) {
-		return prefilled0;
-	}
-	
-	public boolean setPrefilled(boolean prefilled) {
-		return prefilled;
-	}
-	
-	public char setRentGps0(char rentGps0) {
-		return rentGps0;
-	}
-	
-	public boolean setRentGps(boolean rentGps) {
-		return rentGps;
-	}
 	
 	public String getFullName() {
 		return fullName;
@@ -247,6 +238,89 @@ public class Customer {
 	 */
 	public void setCheckoutCarId(Integer checkoutCarId) {
 		this.checkoutCarId = checkoutCarId;
+	}
+
+	/**
+	 * @return the isInsuranceWanted
+	 */
+	public boolean isInsuranceWanted() {
+		return isInsuranceWanted;
+	}
+
+	/**
+	 * @param isInsuranceWanted the isInsuranceWanted to set
+	 */
+	public void setInsuranceWanted(boolean isInsuranceWanted) {
+		this.isInsuranceWanted = isInsuranceWanted;
+	}
+
+	/**
+	 * @return the isPrefillWanted
+	 */
+	public boolean isPrefillWanted() {
+		return isPrefillWanted;
+	}
+
+	/**
+	 * @param isPrefillWanted the isPrefillWanted to set
+	 */
+	public void setPrefillWanted(boolean isPrefillWanted) {
+		this.isPrefillWanted = isPrefillWanted;
+	}
+
+	/**
+	 * @return the isGpsWanted
+	 */
+	public boolean isGpsWanted() {
+		return isGpsWanted;
+	}
+
+	/**
+	 * @param isGpsWanted the isGpsWanted to set
+	 */
+	public void setGpsWanted(boolean isGpsWanted) {
+		this.isGpsWanted = isGpsWanted;
+	}
+
+	/**
+	 * @return the rentDay
+	 */
+	public Integer getRentDay() {
+		return rentDay;
+	}
+
+	/**
+	 * @param rentDay the rentDay to set
+	 */
+	public void setRentDay(Integer rentDay) {
+		this.rentDay = rentDay;
+	}
+
+	public boolean IsExistingCustomer() {
+		boolean isExistingCustomer = false;
+		
+//		System.out.println("Please enter your driver license number?"); // Driver license validate et. Yanlis yazilmissa uyari ver ...
+//		String driverLicenseNum = input.nextLine().toUpperCase();
+//		newCustomer.setDriverLicenseNum(driverLicenseNum);
+		
+		String query =  "SELECT * from customer;";
+		
+		ResultSet result = dbManager.executeSQL(query);
+		
+		try {
+			while(result.next()) {
+				if(result.getString(2).contentEquals(driverLicenseNum)){
+					isExistingCustomer = true;
+					break;
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		
+		
+		return isExistingCustomer;
 	}
 
 	
