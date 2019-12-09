@@ -22,6 +22,7 @@ public class Customer {
 	private Integer reservedCarId;
 	private Integer checkoutCarId;
 	
+	
 	public Customer() {
 		
 	}
@@ -48,13 +49,20 @@ public class Customer {
 	}
 	
 	
-	
-	public boolean createCustomerDb(DatabaseManager dbManager) 
-	{
+	public Customer(int rentDay, boolean insurance, boolean prefilled, boolean rentGps) {
+		// TODO Auto-generated constructor stub
+		
+		this.setRentDay(rentDay);
+		this.setInsurance(insurance);
+		this.setPrefilled(prefilled);
+		this.setRentGps(rentGps);
+		
+	}
+
+	public boolean createCustomerDb(DatabaseManager dbManager){
 
 		boolean result = false;
-		try
-		{
+		try	{
 			String dbQuery = "INSERT INTO customer (fullName, driverLicenseNum, customerPhoneNumber, customerAddress, reservedCarId, checkoutCarId) "
 					+ "VALUES ("+ "\"" + this.fullName + "\"" + " , "+ "\"" + this.driverLicenseNum + "\"" + " , "+ "\"" + this.customerPhoneNumber + "\"" + " , " + "\"" + this.customerAddress+ "\"" +
 					","+ this.reservedCarId +"," + this.checkoutCarId +");";
@@ -64,21 +72,18 @@ public class Customer {
 			System.out.println(dbQuery);
 			int isSuccess = dbManager.updateTable(dbQuery);
 			
-			if (isSuccess == 1)
-			{
+			if (isSuccess == 1)	{
 				System.out.println("Customer has successfully been created in DB");
 				result = true;
 			}
-			else
-			{
+			else{
 				System.out.println("ERROR: Failed to write customer info in DB!");
 				result = false;
 				
 			}
 			
 		}
-		catch(Exception e) 
-		{
+		catch(Exception e) {
 			System.out.println(e);
 		}
 		
@@ -90,12 +95,44 @@ public class Customer {
 		
 		String info = "customer name = " + this.fullName + "\n" + "customer driver license = " + this.driverLicenseNum
 		+ "\n" + "customer phone number = " +  this.customerPhoneNumber + "\n" + "customer address = " + this.customerAddress
-		+ "\n" + "reserved car = " + this.reservedCarId + "\n" + "checked out car" + this.checkoutCarId + "\n";
+		+ "\n" + "reserved car = " + this.reservedCarId + "\n" + "checked out car = " + this.checkoutCarId + "\n";
 		
 		return info;
 	}
 	
+
+	
 	// Attribute getter setters
+	//public Customer(int rentDay, char insurance, char prefilled, char rentGps)
+	
+	public int setRentDay(int rentDay) {
+		return rentDay;
+	}
+	
+	public char setInsurance0(char insurance0) {
+		return insurance0;
+	}
+	
+	public boolean setInsurance(boolean insurance) {
+		return insurance;
+	}
+	
+	public char setPrefilled0(char prefilled0) {
+		return prefilled0;
+	}
+	
+	public boolean setPrefilled(boolean prefilled) {
+		return prefilled;
+	}
+	
+	public char setRentGps0(char rentGps0) {
+		return rentGps0;
+	}
+	
+	public boolean setRentGps(boolean rentGps) {
+		return rentGps;
+	}
+	
 	public String getFullName() {
 		return fullName;
 	}

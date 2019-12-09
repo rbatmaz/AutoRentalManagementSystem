@@ -3,6 +3,10 @@
  */
 package mainPackage;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
 /**
  * @author Rasim
  *
@@ -13,16 +17,41 @@ public class Staff {
 	private String staffAddress;
 	
 	
+	
+//	public inspectionReport(DatabaseManager dbManager){
+//		
+//				
+//		
+//		this.dbManager = dbManager;
+//		Scanner input = new Scanner(System.in);
+//		// Constructor Method
+//		System.out.println("Are you a customer(enter c) or staff(enter s)?");
+//		char type = input.next().charAt(0);
+//		
+//		if(Character.toLowerCase(type) == 'c') {
+//			CustomerConsoleQuestions(CAR_CATEGORIES);
+//		}
+//		
+//		
+//		
+//	}
+//	
+	
+	
+	
+	
+	
+	
 	public boolean checkOutVehicle(Car carWillBeCheckedOut, Customer currentCustomer)
 	{
-		// MIssing implementation
+		// Missing implementation
 		return true;
 	}
 	
 	
 	public boolean reserveVehicle(Car carWillBeReserved, Customer currentCustomer)
 	{
-		// IMplemenattion
+		// Implementation
 		return true;
 	}
 	

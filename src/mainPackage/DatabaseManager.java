@@ -9,24 +9,19 @@ public class DatabaseManager {
 	private Connection dbConnection;
 	private Statement statement;
 	
-	public DatabaseManager()
-	{
-		System.out.println("Constructor method is getting executed...");
-		this.createDbConnection();
+	public DatabaseManager() {
+				this.createDbConnection();
 	}
 		
 	
-	public void createDbConnection()
-	{
+	public void createDbConnection() {
 		
-		try
-		{
+		try	{
 			Class.forName("com.mysql.jdbc.Driver");  
 			this.dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/arms","root","");
 			this.statement = this.dbConnection.createStatement();  
 		}
-		catch(Exception e)
-		{
+		catch(Exception e)	{
 			System.out.println(e);
 		} 		
 	}

@@ -3,6 +3,9 @@
  */
 package mainPackage;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Rasim
@@ -19,12 +22,23 @@ public class Car {
 	private int seatNumber;
 	private int rentRate;
 	private boolean isReserved;
+	private boolean isInsuranced;
 	private boolean isCheckedOut;
+	private boolean isPrefilled;
+	private boolean isRentGps;
+	private String category;
+	
+	
+	private static List<String> CATEGORY_TYPES = Arrays.asList("ECONOMY", "FULL SIZE", "LUXURY", "VAN", "EXOTIC");
 	
 
 	
 	public Car(String make,String model, int year, int milageBeforeRent, String color, String transmission, 
-			int seatNumber, int rentRate ) {
+			int seatNumber, int rentRate, String category ) {
+		
+		if(CATEGORY_TYPES.contains(category) == false) {
+			throw new IllegalArgumentException("The given category " + category  + " is not valid.");
+		}
 		this.make = make;
 		this.model = model;
 		this.year = year;
@@ -36,6 +50,9 @@ public class Car {
 		this.rentRate = rentRate;
 		this.isReserved = false;
 		this.isCheckedOut = false;
+		this.isInsuranced = false;
+		this.setCategory(category);
+		this.setModel(model);
 		
 	
 	}
@@ -45,9 +62,9 @@ public class Car {
 		boolean result = false;
 		try
 		{
-			String dbQuery = "INSERT INTO car (make, model, year, color, transmission, seatNumber, rentRate, isReserved, isCheckedOut) "
+			String dbQuery = "INSERT INTO car (make, model, year, color, transmission, seatNumber, rentRate, isReserved, isCheckedOut, category) "
 					+ "VALUES ("+ "\"" + this.make + "\"" + " , "+ "\"" + this.model + "\"" + " , "+ this.year  + 
-				" , "+ "\"" + this.color + "\"" + " , "+ "\"" + this.transmission + "\"" + "," + this.seatNumber + "," + this.rentRate 	+ ","+ this.isReserved +"," + this.isCheckedOut +");";
+				" , "+ "\"" + this.color + "\"" + " , "+ "\"" + this.transmission + "\"" + "," + this.seatNumber + "," + this.rentRate 	+ ","+ this.isReserved +"," + this.isCheckedOut + " , " + this.category +");";
 			
 			
 			
@@ -210,4 +227,27 @@ public class Car {
 		this.isCheckedOut = isCheckedOut;
 	}
 
+	/**
+	 * @return the category
+	 */
+	public String getCategory() {
+		return category;
+	}
+
+	/**
+	 * @param category the category to set
+	 */
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public boolean isInsuranced() {
+		return isInsuranced;
+	}
+	
+	public void setInsuranced(boolean isInsuranced) {
+		this.isInsuranced = isInsuranced;
+	}
+	
+	
 }
