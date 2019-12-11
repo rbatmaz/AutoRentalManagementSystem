@@ -22,10 +22,12 @@ public class Main {
 		
 		Customer currentCustomer = frontEnd.getCurrentInteractedCustomer();
 		
+		System.out.println("My rental cost : "+currentCustomer.getRentalCost());
+		
 		// Check whether existing customer... If yes, UPDATE, otherwise CREATE new one.
 		// by looking at Driver License
 		
-		boolean isAlreadyExisting = currentCustomer.IsExistingCustomer(); // TODO: This method should be implemented
+		boolean isAlreadyExisting = currentCustomer.IsExistingCustomer(dbManager); // TODO: This method should be implemented
 		
 		if (isAlreadyExisting)
 		{
@@ -35,14 +37,6 @@ public class Main {
 		{
 			boolean isSuccess = currentCustomer.createCustomerDb(dbManager);
 		}
-		
-		
-		
-		
-		
-		
-		
-		int x = 5;
 
 		
 		

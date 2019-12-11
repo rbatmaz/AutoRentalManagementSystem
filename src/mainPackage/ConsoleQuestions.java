@@ -10,20 +10,21 @@ public class ConsoleQuestions
 	
 	DatabaseManager dbManager;
 	private Customer currentInteractedCustomer = null;
+
 	
 
 	
 	
 	public ConsoleQuestions(DatabaseManager dbManager){
 		
-		Map <Integer, String> CAR_CATEGORIES = new HashMap<>();
+		Map <Integer, CarCategory> CAR_CATEGORIES = new HashMap<>();
 		
 		//Add categories
-		CAR_CATEGORIES.put(1, "ECONOMY");
-		CAR_CATEGORIES.put(2, "FULL SIZE");
-		CAR_CATEGORIES.put(3, "LUXURY");
-		CAR_CATEGORIES.put(4, "VAN");
-		CAR_CATEGORIES.put(5, "EXOTIC");
+		CAR_CATEGORIES.put(1, new CarCategory("ECONOMY"));
+		CAR_CATEGORIES.put(2, new CarCategory("FULL SIZE"));
+		CAR_CATEGORIES.put(3, new CarCategory("LUXURY"));
+		CAR_CATEGORIES.put(4, new CarCategory("VAN"));
+		CAR_CATEGORIES.put(5, new CarCategory("EXOTIC"));
 		
 				
 		
@@ -44,7 +45,7 @@ public class ConsoleQuestions
 	}
 	
 	
-	public Customer CustomerConsoleQuestions(Map <Integer, String> CAR_CATEGORIES) { // BU nedir? Omere sor ???
+	public Customer CustomerConsoleQuestions(Map <Integer, CarCategory> CAR_CATEGORIES) { // BU nedir? Omere sor ???
 		Scanner input = new Scanner(System.in);
 		Customer newCustomer = new Customer();
 
@@ -88,18 +89,13 @@ public class ConsoleQuestions
 		
 		else 
 		{
-			
-			
 			try {
-				newCustomer = new Customer(result.getString(1), result.getString(2), result.getString(3), result.getString(4), result.getInt(5), result.getInt(6) );
+				newCustomer = new Customer(result.getString(1), result.getString(2), result.getString(3), result.getString(4), result.getInt(5) );
 			} catch (Exception e) {
 				System.out.println(e);
 			}
 		
 		}
-	
-	
-		System.out.println(newCustomer.getCustomerInfo());
 		
 //		if(isExistingCustomer == false) 
 //		{
@@ -110,7 +106,7 @@ public class ConsoleQuestions
 		Integer category = input.nextInt();
 		
 			
-		query =  "SELECT ID,make,model,color,transmission,seatNumber,rentRate from car where Category=" + '"' + CAR_CATEGORIES.get(category) + '"' + ";";
+		query =  "SELECT ID,make,model,color,transmission,seatNumber,rentRate from car where Category=" + '"' + CAR_CATEGORIES.get(category).getCategory() + '"' + ";";
 		
 		result = dbManager.executeSQL(query);
 		
@@ -128,9 +124,9 @@ public class ConsoleQuestions
 			while(result.next()) {
 				
 				System.out.printf("%-12s%-12s%-20s%-12s%-18s%-12s%s\n",
-						String.valueOf(result.getInt(7)),
-						result.getString(1).toUpperCase(),
+						String.valueOf(result.getInt(1)),
 						result.getString(2).toUpperCase(),
+						result.getString(3).toUpperCase(),
 						result.getString(4).toUpperCase(),
 						result.getString(5).toUpperCase(),
 						String.valueOf(result.getInt(6)),
@@ -152,7 +148,7 @@ public class ConsoleQuestions
 		int rentDay = input.nextInt();
 		newCustomer.setRentDay(rentDay);
 		
-		System.out.println("Would you lie to get insurance with an extra cost of 45 CAD per day ? (Y/N)"); // Bu fiyati arabanin cinsine gore degistirebilirim. Y veya N disinda birsey yazilirsa hata ver.
+		System.out.println("Would you like to get insurance with an extra cost of 45 CAD per day ? (Y/N)"); // Bu fiyati arabanin cinsine gore degistirebilirim. Y veya N disinda birsey yazilirsa hata ver.
 		char insuranceWanted = input.next().charAt(0);
 		
 		if(insuranceWanted == 'Y') 
@@ -189,8 +185,8 @@ public class ConsoleQuestions
 			newCustomer.setGpsWanted(false);
 		}
 		
+		newCustomer.setRentalCost(dbManager, CAR_CATEGORIES);
 		
-		// newCustomer = new Customer(rentDay,insurance,prefilled,rentGps);
 
 		
 		return newCustomer;
@@ -211,6 +207,9 @@ public class ConsoleQuestions
 	public void setCurrentInteractedCustomer(Customer currentInteractedCustomer) {
 		this.currentInteractedCustomer = currentInteractedCustomer;
 	}
+
+
+
 
 	
 	

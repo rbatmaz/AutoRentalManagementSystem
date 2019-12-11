@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 
 /**
  * @author Rasim
@@ -20,25 +21,29 @@ public class Customer {
 	private String customerPhoneNumber = "";
 	private String customerAddress = "";
 	private Integer reservedCarId = -1;
-	private Integer checkoutCarId = -1;
 	private boolean isInsuranceWanted;
 	private boolean isPrefillWanted;
 	private boolean isGpsWanted;
 	private Integer rentDay;
+	private Integer rentalCost;
+	
+	private static int GPS_COST = 5;
+	
+	
 	
 	
 	public Customer() {
 		
 	}
 	
-	public Customer(String fullName, String driverLicenseNum, String phoneNum, String address, Integer reservedCarId, Integer checkoutCarId)
+	public Customer(String fullName, String driverLicenseNum, String phoneNum, String address, Integer reservedCarId)
 	{
 		this.setFullName(fullName);
 		this.setDriverLicenseNum(driverLicenseNum);
 		this.setCustomerPhoneNumber(phoneNum);
 		this.setCustomerAddress(address);
 		this.setReservedCarId(reservedCarId);
-		this.setCheckoutCarId(checkoutCarId);
+
 	}
 
 
@@ -49,7 +54,7 @@ public class Customer {
 		this.setCustomerPhoneNumber(phoneNum);
 		this.setCustomerAddress(address);
 		this.setReservedCarId(null);
-		this.setCheckoutCarId(null);
+
 	}
 	
 	
@@ -66,25 +71,30 @@ public class Customer {
 	public boolean createCustomerDb(DatabaseManager dbManager){
 
 		boolean result = false;
-		try	{
+		try	{					
+			
 			String dbQuery = "INSERT INTO customer ("
 					+ "fullName,"
 					+ "driverLicenseNum, "
 					+ "customerPhoneNumber, "
 					+ "customerAddress, "
 					+ "reservedCarId, "
-					+ "checkoutCarId) "
+					+ "insurance, "
+					+ "preFilledGas, "
+					+ "GPS,"
+					+ "rentDays)"
 					+ "VALUES ("+ "\"" + 
 					this.fullName + "\"" + " , "+ "\"" + 
 					this.driverLicenseNum + "\"" + " , "+ "\"" + 
 					this.customerPhoneNumber + "\"" + " , " + "\"" + 
 					this.customerAddress+ "\"" + ","+ 
-					this.reservedCarId +"," + 
-					this.checkoutCarId +");";
+					this.reservedCarId + "," +
+					this.isInsuranceWanted + "," +
+					this.isPrefillWanted + "," +
+					this.isGpsWanted + "," +
+					this.rentDay +	");";
 			
-			
-			
-			System.out.println(dbQuery);
+
 			int isSuccess = dbManager.updateTable(dbQuery);
 			
 			if (isSuccess == 1)	{
@@ -108,14 +118,61 @@ public class Customer {
 	
 	public String getCustomerInfo() {
 		
-		String info = "customer name = " + this.fullName + "\n" + "customer driver license = " + this.driverLicenseNum
-		+ "\n" + "customer phone number = " +  this.customerPhoneNumber + "\n" + "customer address = " + this.customerAddress
-		+ "\n" + "reserved car = " + this.reservedCarId + "\n" + "checked out car = " + this.checkoutCarId + "\n";
+		String info = "Customer name = " + this.fullName + "\n" + 
+					  "Customer driver license = " + this.driverLicenseNum + "\n" +
+					  "Customer phone number = " +  this.customerPhoneNumber + "\n" +
+					  "Customer address = " + this.customerAddress+ "\n" +
+					  "Reserved car = " + this.reservedCarId + "\n";
 		
 		return info;
 	}
 	
+	public Integer keyFinder(Map <Integer, CarCategory> categories, String value) {
+		
+		for (Map.Entry<Integer, CarCategory> entry : categories.entrySet()) {
+			if(value.contentEquals(entry.getValue().getCategory())) {
+				return entry.getKey();
+			}
+		}
+		
+		throw new IllegalArgumentException("The given category " + value  + " is not valid.");
+	}
+	
+	/**
+	 * @param rentalCost the rentalCost to set
+	 */
+	public void setRentalCost(DatabaseManager dbManager, Map <Integer, CarCategory> CAR_CATEGORIES) {
 
+		Integer cost = 0;
+		String query =  "SELECT rentRate,Category from car where ID = " + this.reservedCarId + ";";
+		
+		ResultSet result = dbManager.executeSQL(query);
+		
+		
+		try {
+			while(result.next()) {
+			Integer key = keyFinder(CAR_CATEGORIES, result.getString(2));
+			cost = this.rentDay * result.getInt(1);
+			
+			if(this.isGpsWanted) {
+				cost += this.rentDay * GPS_COST;
+			}
+			if(this.isInsuranceWanted) {
+				
+				cost += this.rentDay * CAR_CATEGORIES.get(key).getInsuranceCost();
+			}
+			if(this.isPrefillWanted) {
+				cost += CAR_CATEGORIES.get(key).getPreFilledGasCost();
+			}
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}	
+
+		this.rentalCost = cost;
+	}
+	
 	
 	// Attribute getter setters
 	//public Customer(int rentDay, char insurance, char prefilled, char rentGps)
@@ -226,19 +283,6 @@ public class Customer {
 		this.reservedCarId = reservedCarId;
 	}
 
-	/**
-	 * @return the checkoutCarId
-	 */
-	public Integer getCheckoutCarId() {
-		return checkoutCarId;
-	}
-
-	/**
-	 * @param checkoutCarId the checkoutCarId to set
-	 */
-	public void setCheckoutCarId(Integer checkoutCarId) {
-		this.checkoutCarId = checkoutCarId;
-	}
 
 	/**
 	 * @return the isInsuranceWanted
@@ -296,8 +340,9 @@ public class Customer {
 		this.rentDay = rentDay;
 	}
 
-	public boolean IsExistingCustomer() {
+	public boolean IsExistingCustomer(DatabaseManager dbManager) {
 		boolean isExistingCustomer = false;
+
 		
 //		System.out.println("Please enter your driver license number?"); // Driver license validate et. Yanlis yazilmissa uyari ver ...
 //		String driverLicenseNum = input.nextLine().toUpperCase();
@@ -306,6 +351,7 @@ public class Customer {
 		String query =  "SELECT * from customer;";
 		
 		ResultSet result = dbManager.executeSQL(query);
+		
 		
 		try {
 			while(result.next()) {
@@ -322,6 +368,15 @@ public class Customer {
 		
 		return isExistingCustomer;
 	}
+
+	/**
+	 * @return the rentalCost
+	 */
+	public Integer getRentalCost() {
+		return rentalCost;
+	}
+
+
 
 	
 	
