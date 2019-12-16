@@ -27,6 +27,7 @@ public class DatabaseManager {
 	}
 	
 	public ResultSet executeSQL(String query) {
+		// This method supports all kind of CRUD operations
 		
 		ResultSet rs = null;
 		try {
