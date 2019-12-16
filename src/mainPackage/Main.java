@@ -22,7 +22,7 @@ public class Main {
 		
 		Customer currentCustomer = frontEnd.getCurrentInteractedCustomer();
 		
-		System.out.println("My rental cost : "+currentCustomer.getRentalCost());
+		System.out.println("Rental cost  for "+ currentCustomer.getFullName() +" is " +currentCustomer.getRentalCost() + ".");
 		
 		// Check whether existing customer... If yes, UPDATE, otherwise CREATE new one.
 		// by looking at Driver License
